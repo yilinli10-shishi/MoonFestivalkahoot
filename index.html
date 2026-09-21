@@ -244,31 +244,35 @@
   <!-- 核心運作邏輯 -->
   <script>
     const OMIKUJI_LIST = [
-      {
-        category: "天字第一號・炭火總指揮官",
-        rank: "上上籤・首獎",
-        line1: "生肉熟食分得清，香腸金黃不帶黑；",
-        line2: "眾人皆搶吐司片，唯你獨享五花肉。"
-      },
-      {
-        category: "特級柚惑・熱量免役大師",
-        rank: "大吉・吃貨籤",
-        line1: "蛋黃酥皮層層起，柚子甜美不用剝；",
-        line2: "連假熱量歸月亮，長肉全算在吳剛。"
-      },
-      {
-        category: "佛系看客・人間避雷針",
-        rank: "中吉・安泰籤",
-        line1: "木炭點火半小時，火星未起心先平；",
-        line2: "雖然答錯三五題，至少沒被濃煙燻。"
-      },
-      {
-        category: "吳剛化身・下班解脫者",
-        rank: "末吉・放飛籤",
-        line1: "砍樹萬年砍不倒，作答全憑直覺衝；",
-        line2: "分數高低皆浮雲，連假放飛萬事通。"
-      }
-    ];
+  {
+    category: "天字第一號・炭火總指揮官",
+    rank: "上上籤・首獎",
+    line1: "生肉熟食分得清，香腸金黃不帶黑；",
+    line2: "眾人皆搶吐司片，唯你獨享五花肉。",
+    image: "mascot1.png" // 👈 抽到這張就顯示 mascot1.png
+  },
+  {
+    category: "特級柚惑・熱量免役大師",
+    rank: "大吉・吃貨籤",
+    line1: "蛋黃酥皮層層起，柚子甜美不用剝；",
+    line2: "連假熱量歸月亮，長肉全算在吳剛。",
+    image: "mascot2.png" // 👈 抽到這張就顯示 mascot2.png
+  },
+  {
+    category: "佛系看客・人間避雷針",
+    rank: "中吉・安泰籤",
+    line1: "木炭點火半小時，火星未起心先平；",
+    line2: "雖然答錯三五題，至少沒被濃煙燻。",
+    image: "mascot3.png" // 👈 抽到這張就顯示 mascot3.png
+  },
+  {
+    category: "吳剛化身・下班解脫者",
+    rank: "末吉・放飛籤",
+    line1: "砍樹萬年砍不倒，作答全憑直覺衝；",
+    line2: "分數高低皆浮雲，連假放飛萬事通。",
+    image: "mascot4.png" // 👈 抽到這張就顯示 mascot4.png
+  }
+];
 
     const drawBox = document.getElementById('drawBox');
     const drawBtn = document.getElementById('drawBtn');
@@ -299,6 +303,7 @@
         poemLine1.textContent = luckyOne.line1;
         poemLine2.textContent = luckyOne.line2;
 
+        document.getElementById('fixedMascotImg').src = luckyOne.image;
         drawBox.classList.add('hidden');
         omikujiWrapper.classList.remove('hidden');
         omikujiWrapper.scrollIntoView({ behavior: 'smooth' });
