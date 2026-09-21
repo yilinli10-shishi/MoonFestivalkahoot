@@ -6,12 +6,12 @@
   <title>Kahoot! 中秋太陰御神籤・線上抽籤所</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- html2canvas 用於匯出高清長條籤紙圖 -->
+  <!-- html2canvas: 支援匯出高解析度長條籤紙圖片 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <!-- Google Fonts: 日系正統明朝體、宋體與禪意字體 -->
+  <!-- Google Fonts: 正統日式明朝體、宋體與古典襯線字體 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Noto+Serif+JP:wght@600;900&family=Noto+Serif+TC:wght@600;700;900&family=Zen+Old+Mincho:wght@600;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@600;900&family=Noto+Serif+TC:wght@600;700;900&family=Zen+Old+Mincho:wght@600;900&display=swap" rel="stylesheet">
 
   <style>
     body {
@@ -29,7 +29,7 @@
       box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(185, 28, 28, 0.15);
     }
 
-    /* 直排文字書寫模式 (神社神籤專用古典直排) */
+    /* 直排文字書寫模式 (全直排排版) */
     .vertical-text {
       writing-mode: vertical-rl;
       text-orientation: mixed;
@@ -81,24 +81,15 @@
       </svg>
     </div>
 
-    <!-- 自選/更換圖片小工具 (若想放自己的獅獅或特定圖) -->
-    <div class="w-full mt-4 pt-3 border-t border-slate-700/60 flex flex-col items-center">
-      <label for="customImgInput" class="text-[11px] text-amber-300/80 hover:text-amber-200 cursor-pointer flex items-center gap-1">
-        <span>🖼️ 點此換上自己的自訂吉祥物圖案 (可選)</span>
-      </label>
-      <input type="file" id="customImgInput" accept="image/*" class="hidden">
-      <span id="imgTip" class="text-[10px] text-slate-500 mt-0.5">預設使用原創吃肉獅獅圖案</span>
-    </div>
-
     <button 
       id="drawBtn"
-      class="mt-4 w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-red-900/30 transition duration-150 flex items-center justify-center gap-2 text-sm tracking-wider"
+      class="mt-6 w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-red-900/30 transition duration-150 flex items-center justify-center gap-2 text-sm tracking-wider"
     >
       <span>🎋 搖一搖・求取神籤</span>
     </button>
   </section>
 
-  <!-- ⛩️ 神社御神籤紙條 (乾淨純粹版：拿掉下方大段文字) -->
+  <!-- ⛩️ 神社御神籤紙條 (Omikuji 固定版型) -->
   <main id="omikujiWrapper" class="w-full flex flex-col items-center hidden">
     
     <!-- 籤紙容器 (修長長方形 800*1200 等比視覺) -->
@@ -106,7 +97,7 @@
       id="omikujiPaper" 
       class="w-[330px] washi-paper border-2 border-[#b91c1c]/30 text-[#b91c1c] p-4 relative overflow-hidden flex flex-col items-center select-none"
     >
-      <!-- 頂部人字破風屋簷與菊花紋飾 -->
+      <!-- 頂部人字破風屋簷與十六瓣菊花徽記 (Kikumon) -->
       <div class="w-full flex flex-col items-center">
         <svg class="w-full h-11" viewBox="0 0 320 50" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M 5 25 L 160 5 L 315 25" stroke="#b91c1c" stroke-width="2.5" fill="none"/>
@@ -154,10 +145,10 @@
       <div class="w-full border-t border-[#b91c1c] mt-4"></div>
       <div class="w-full border-t border-[#b91c1c] mt-0.5 mb-5"></div>
 
-      <!-- 核心直排籤詩祝詞 ＋ 吉祥物圖案區 (純淨版，無多餘長文字) -->
+      <!-- 核心直排籤詩祝詞 ＋ 永久內嵌自訂吉祥物圖案 (Base64 永久固定，防外界竄改) -->
       <div class="w-full flex items-center justify-center min-h-[220px] px-3 relative my-2">
         
-        <!-- 中央偏左：全直排日式明朝體籤詩 (寬鬆大器) -->
+        <!-- 中央偏左：全直排日式明朝體籤詩 -->
         <div class="flex items-start justify-center gap-6 h-[210px] mr-12">
           <!-- 第二行 (左) -->
           <p id="poemLine2" class="vertical-text text-base font-bold text-[#b91c1c] tracking-widest leading-loose">
@@ -169,13 +160,18 @@
           </p>
         </div>
 
-        <!-- 右下角吉祥物圖片容器 (可自訂上傳，預設為吃肉獅獅) -->
-        <div class="absolute bottom-0 right-2 z-10 w-24 h-24 flex items-end justify-center pointer-events-none">
+        <!-- 
+          =======================================================
+          【右下角：永久固定專屬圖片位置（方法二 Base64）】
+          請將下方 img 的 src 替換為你的 Base64 編碼文字（data:image/png;base64,...）
+          =======================================================
+        -->
+        <div class="absolute bottom-0 right-1 z-10 w-24 h-24 flex items-end justify-center pointer-events-none select-none">
           <img 
-            id="mascotImg" 
+            id="fixedMascotImg" 
             src="data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M50 15 C30 15 18 30 18 50 C18 70 30 85 50 85 C70 85 82 70 82 50 C82 30 70 15 50 15 Z' fill='%23C27D38'/><circle cx='50' cy='18' r='7' fill='%23A86224'/><circle cx='28' cy='26' r='7' fill='%23A86224'/><circle cx='72' cy='26' r='7' fill='%23A86224'/><circle cx='18' cy='48' r='7' fill='%23A86224'/><circle cx='82' cy='48' r='7' fill='%23A86224'/><circle cx='28' cy='72' r='7' fill='%23A86224'/><circle cx='72' cy='72' r='7' fill='%23A86224'/><ellipse cx='50' cy='53' rx='27' ry='24' fill='%23E8A859'/><ellipse cx='50' cy='58' rx='20' ry='16' fill='%23FDE3B2'/><circle cx='34' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><circle cx='66' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><path d='M36 47 Q40 43 44 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M56 47 Q60 43 64 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M46 58 Q50 63 54 58' stroke='%233E2415' stroke-width='2' stroke-linecap='round'/><g transform='translate(68, 62) rotate(25)'><line x1='0' y1='0' x2='0' y2='28' stroke='%238D5B28' stroke-width='2' stroke-linecap='round'/><circle cx='0' cy='6' r='3.5' fill='%23B91C1C'/><circle cx='0' cy='13' r='3.5' fill='%2315803D'/><circle cx='0' cy='20' r='3.5' fill='%23B45309'/></g></svg>" 
-            alt="吉祥物"
-            class="max-w-full max-h-full object-contain drop-shadow-sm"
+            alt="專屬吉祥物" 
+            class="w-full h-full object-contain drop-shadow-sm pointer-events-none"
           >
         </div>
 
@@ -185,7 +181,7 @@
       <div class="w-full border-t border-[#b91c1c] mt-4"></div>
       <div class="w-full border-t-2 border-[#b91c1c] mt-0.5"></div>
 
-      <!-- 底部紅白慶典水引繩結 (Mizuhiki 梅花結) -->
+      <!-- 底部紅白慶典水引繩結 (Mizuhiki Umemusubi 梅花結) -->
       <div class="w-full flex flex-col items-center my-3.5 relative">
         <svg class="w-48 h-10" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="20" x2="80" y2="20" stroke="#b91c1c" stroke-width="1.2"/>
@@ -281,29 +277,12 @@
     const omikujiPaper = document.getElementById('omikujiPaper');
     const redrawBtn = document.getElementById('redrawBtn');
     const saveImgBtn = document.getElementById('saveImgBtn');
-    const mascotImg = document.getElementById('mascotImg');
-    const customImgInput = document.getElementById('customImgInput');
-    const imgTip = document.getElementById('imgTip');
 
     // 籤紙欄位
     const omikujiCategory = document.getElementById('omikujiCategory');
     const omikujiRank = document.getElementById('omikujiRank');
     const poemLine1 = document.getElementById('poemLine1');
     const poemLine2 = document.getElementById('poemLine2');
-
-    // 自訂上傳圖片即時預覽功能
-    customImgInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          mascotImg.src = event.target.result;
-          imgTip.textContent = `✅ 已成功換上自訂圖片：${file.name}`;
-          imgTip.classList.add('text-emerald-400');
-        };
-        reader.readAsDataURL(file);
-      }
-    });
 
     // 搖籤動作
     function performDraw() {
@@ -367,4 +346,3 @@
   </script>
 </body>
 </html>
-```eof
