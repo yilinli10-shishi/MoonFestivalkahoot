@@ -145,7 +145,7 @@
       <div class="w-full border-t border-[#b91c1c] mt-4"></div>
       <div class="w-full border-t border-[#b91c1c] mt-0.5 mb-5"></div>
 
-      <!-- 核心直排籤詩祝詞 ＋ 永久內嵌自訂吉祥物圖案 (Base64 永久固定，防外界竄改) -->
+      <!-- 核心直排籤詩祝詞 ＋ 多圖切換吉祥物容器 -->
       <div class="w-full flex items-center justify-center min-h-[220px] px-3 relative my-2">
         
         <!-- 中央偏左：全直排日式明朝體籤詩 -->
@@ -160,16 +160,11 @@
           </p>
         </div>
 
-        <!-- 
-          =======================================================
-          【右下角：永久固定專屬圖片位置（方法二 Base64）】
-          請將下方 img 的 src 替換為你的 Base64 編碼文字（data:image/png;base64,...）
-          =======================================================
-        -->
+        <!-- 右下角：依籤位自動切換的專屬圖片 (mascot1.png ~ mascot4.png) -->
         <div class="absolute bottom-0 right-1 z-10 w-24 h-24 flex items-end justify-center pointer-events-none select-none">
           <img 
             id="fixedMascotImg" 
-            src="data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M50 15 C30 15 18 30 18 50 C18 70 30 85 50 85 C70 85 82 70 82 50 C82 30 70 15 50 15 Z' fill='%23C27D38'/><circle cx='50' cy='18' r='7' fill='%23A86224'/><circle cx='28' cy='26' r='7' fill='%23A86224'/><circle cx='72' cy='26' r='7' fill='%23A86224'/><circle cx='18' cy='48' r='7' fill='%23A86224'/><circle cx='82' cy='48' r='7' fill='%23A86224'/><circle cx='28' cy='72' r='7' fill='%23A86224'/><circle cx='72' cy='72' r='7' fill='%23A86224'/><ellipse cx='50' cy='53' rx='27' ry='24' fill='%23E8A859'/><ellipse cx='50' cy='58' rx='20' ry='16' fill='%23FDE3B2'/><circle cx='34' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><circle cx='66' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><path d='M36 47 Q40 43 44 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M56 47 Q60 43 64 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M46 58 Q50 63 54 58' stroke='%233E2415' stroke-width='2' stroke-linecap='round'/><g transform='translate(68, 62) rotate(25)'><line x1='0' y1='0' x2='0' y2='28' stroke='%238D5B28' stroke-width='2' stroke-linecap='round'/><circle cx='0' cy='6' r='3.5' fill='%23B91C1C'/><circle cx='0' cy='13' r='3.5' fill='%2315803D'/><circle cx='0' cy='20' r='3.5' fill='%23B45309'/></g></svg>" 
+            src="mascot1.png" 
             alt="專屬吉祥物" 
             class="w-full h-full object-contain drop-shadow-sm pointer-events-none"
           >
@@ -243,36 +238,40 @@
 
   <!-- 核心運作邏輯 -->
   <script>
+    // 預設備份向量獅獅（防呆容錯，即使圖片路徑填錯也不會破圖）
+    const FALLBACK_MASCOT = "data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M50 15 C30 15 18 30 18 50 C18 70 30 85 50 85 C70 85 82 70 82 50 C82 30 70 15 50 15 Z' fill='%23C27D38'/><circle cx='50' cy='18' r='7' fill='%23A86224'/><circle cx='28' cy='26' r='7' fill='%23A86224'/><circle cx='72' cy='26' r='7' fill='%23A86224'/><circle cx='18' cy='48' r='7' fill='%23A86224'/><circle cx='82' cy='48' r='7' fill='%23A86224'/><circle cx='28' cy='72' r='7' fill='%23A86224'/><circle cx='72' cy='72' r='7' fill='%23A86224'/><ellipse cx='50' cy='53' rx='27' ry='24' fill='%23E8A859'/><ellipse cx='50' cy='58' rx='20' ry='16' fill='%23FDE3B2'/><circle cx='34' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><circle cx='66' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><path d='M36 47 Q40 43 44 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M56 47 Q60 43 64 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M46 58 Q50 63 54 58' stroke='%233E2415' stroke-width='2' stroke-linecap='round'/><g transform='translate(68, 62) rotate(25)'><line x1='0' y1='0' x2='0' y2='28' stroke='%238D5B28' stroke-width='2' stroke-linecap='round'/><circle cx='0' cy='6' r='3.5' fill='%23B91C1C'/><circle cx='0' cy='13' r='3.5' fill='%2315803D'/><circle cx='0' cy='20' r='3.5' fill='%23B45309'/></g></svg>";
+
+    // 4 款籤紙與其對應的圖片檔名
     const OMIKUJI_LIST = [
-  {
-    category: "天字第一號・炭火總指揮官",
-    rank: "上上籤・首獎",
-    line1: "生肉熟食分得清，香腸金黃不帶黑；",
-    line2: "眾人皆搶吐司片，唯你獨享五花肉。",
-    image: "mascot1.png" // 👈 抽到這張就顯示 mascot1.png
-  },
-  {
-    category: "特級柚惑・熱量免役大師",
-    rank: "大吉・吃貨籤",
-    line1: "蛋黃酥皮層層起，柚子甜美不用剝；",
-    line2: "連假熱量歸月亮，長肉全算在吳剛。",
-    image: "mascot2.png" // 👈 抽到這張就顯示 mascot2.png
-  },
-  {
-    category: "佛系看客・人間避雷針",
-    rank: "中吉・安泰籤",
-    line1: "木炭點火半小時，火星未起心先平；",
-    line2: "雖然答錯三五題，至少沒被濃煙燻。",
-    image: "mascot3.png" // 👈 抽到這張就顯示 mascot3.png
-  },
-  {
-    category: "吳剛化身・下班解脫者",
-    rank: "末吉・放飛籤",
-    line1: "砍樹萬年砍不倒，作答全憑直覺衝；",
-    line2: "分數高低皆浮雲，連假放飛萬事通。",
-    image: "mascot4.png" // 👈 抽到這張就顯示 mascot4.png
-  }
-];
+      {
+        category: "天字第一號・炭火總指揮官",
+        rank: "上上籤・首獎",
+        line1: "生肉熟食分得清，香腸金黃不帶黑；",
+        line2: "眾人皆搶吐司片，唯你獨享五花肉。",
+        image: "mascot1.png" // 👈 炭火總指揮官專屬圖片
+      },
+      {
+        category: "特級柚惑・熱量免役大師",
+        rank: "大吉・吃貨籤",
+        line1: "蛋黃酥皮層層起，柚子甜美不用剝；",
+        line2: "連假熱量歸月亮，長肉全算在吳剛。",
+        image: "mascot2.png" // 👈 熱量免役大師專屬圖片
+      },
+      {
+        category: "佛系看客・人間避雷針",
+        rank: "中吉・安泰籤",
+        line1: "木炭點火半小時，火星未起心先平；",
+        line2: "雖然答錯三五題，至少沒被濃煙燻。",
+        image: "mascot3.png" // 👈 人間避雷針專屬圖片
+      },
+      {
+        category: "吳剛化身・下班解脫者",
+        rank: "末吉・放飛籤",
+        line1: "砍樹萬年砍不倒，作答全憑直覺衝；",
+        line2: "分數高低皆浮雲，連假放飛萬事通。",
+        image: "mascot4.png" // 👈 下班解脫者專屬圖片
+      }
+    ];
 
     const drawBox = document.getElementById('drawBox');
     const drawBtn = document.getElementById('drawBtn');
@@ -281,12 +280,18 @@
     const omikujiPaper = document.getElementById('omikujiPaper');
     const redrawBtn = document.getElementById('redrawBtn');
     const saveImgBtn = document.getElementById('saveImgBtn');
+    const fixedMascotImg = document.getElementById('fixedMascotImg');
 
     // 籤紙欄位
     const omikujiCategory = document.getElementById('omikujiCategory');
     const omikujiRank = document.getElementById('omikujiRank');
     const poemLine1 = document.getElementById('poemLine1');
     const poemLine2 = document.getElementById('poemLine2');
+
+    // 圖片載入失敗防呆（自動退回預設向量圖案）
+    fixedMascotImg.addEventListener('error', function() {
+      this.src = FALLBACK_MASCOT;
+    });
 
     // 搖籤動作
     function performDraw() {
@@ -298,12 +303,15 @@
         cylinder.classList.remove('animate-shake');
         const luckyOne = OMIKUJI_LIST[Math.floor(Math.random() * OMIKUJI_LIST.length)];
         
+        // 替換文案
         omikujiCategory.textContent = luckyOne.category;
         omikujiRank.textContent = luckyOne.rank;
         poemLine1.textContent = luckyOne.line1;
         poemLine2.textContent = luckyOne.line2;
 
-        document.getElementById('fixedMascotImg').src = luckyOne.image;
+        // 切換對應籤位的專屬圖片
+        fixedMascotImg.src = luckyOne.image;
+
         drawBox.classList.add('hidden');
         omikujiWrapper.classList.remove('hidden');
         omikujiWrapper.scrollIntoView({ behavior: 'smooth' });
