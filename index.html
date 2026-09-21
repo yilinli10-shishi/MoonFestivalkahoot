@@ -6,9 +6,9 @@
   <title>Kahoot! 中秋太陰御神籤・線上抽籤所</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- html2canvas 用於匯出高清籤紙圖 -->
+  <!-- html2canvas 用於匯出高清長條籤紙圖 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <!-- Google Fonts: 日系明朝體、宋體與手寫楷書 -->
+  <!-- Google Fonts: 日系正統明朝體、宋體與禪意字體 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500&family=Noto+Serif+JP:wght@600;900&family=Noto+Serif+TC:wght@600;700;900&family=Zen+Old+Mincho:wght@600;900&display=swap" rel="stylesheet">
@@ -21,19 +21,19 @@
 
     /* 正統日本和紙/宣紙纖維底色 */
     .washi-paper {
-      background-color: #fbfbf9;
+      background-color: #fcfbfa;
       background-image: 
-        radial-gradient(rgba(200, 190, 170, 0.25) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255, 255, 255, 0.7), rgba(246, 243, 235, 0.9));
+        radial-gradient(rgba(190, 180, 160, 0.25) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(246, 243, 235, 0.95));
       background-size: 8px 8px, 100% 100%;
-      box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5), 0 0 0 1px rgba(180, 50, 40, 0.15);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.6), 0 0 0 1px rgba(185, 28, 28, 0.15);
     }
 
-    /* 直排文字書寫模式 (全直排排版) */
+    /* 直排文字書寫模式 (神社神籤專用古典直排) */
     .vertical-text {
       writing-mode: vertical-rl;
       text-orientation: mixed;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
     }
 
     /* 籤筒搖晃動畫 */
@@ -60,57 +60,59 @@
     <h1 class="text-2xl font-bold tracking-wide text-amber-100">
       Kahoot! 挑戰完賽抽籤所
     </h1>
-    <p class="text-xs text-slate-400 mt-1 leading-relaxed">
-      答題完畢！搖動神籤筒求取你的中秋運勢籤紙<br>
-      長按存圖貼回 FB 留言，即可解鎖「詳細解籤 ＋ 冷知識題組」！
+    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">
+      答題完畢！搖動神籤筒求取中秋專屬運勢籤紙<br>
+      長按存圖貼回 FB 留言，領取「詳細解籤 ＋ 冷知識題組包」！
     </p>
   </header>
 
   <!-- 籤筒搖籤互動區 -->
-  <section id="drawBox" class="w-full max-w-xs flex flex-col items-center bg-slate-900/70 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl mb-6">
+  <section id="drawBox" class="w-full max-w-xs flex flex-col items-center bg-slate-900/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl mb-6">
     <!-- 籤筒本體 SVG -->
     <div id="cylinder" class="cursor-pointer transition-transform hover:scale-105 active:scale-95 duration-200">
       <svg width="120" height="150" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- 籤筒竹身 -->
         <path d="M25 40 L30 140 C30 145 90 145 90 140 L95 40 Z" fill="#b45309" stroke="#78350f" stroke-width="3"/>
         <path d="M25 40 C25 35 95 35 95 40 C95 45 25 45 25 40 Z" fill="#d97706" stroke="#78350f" stroke-width="2"/>
-        <!-- 籤竹突出部分 -->
         <line x1="60" y1="12" x2="60" y2="40" stroke="#fde68a" stroke-width="5" stroke-linecap="round"/>
         <line x1="48" y1="20" x2="52" y2="40" stroke="#fef3c7" stroke-width="4" stroke-linecap="round"/>
         <line x1="72" y1="18" x2="68" y2="40" stroke="#fef3c7" stroke-width="4" stroke-linecap="round"/>
-        <!-- 籤筒紅色飾帶 -->
         <rect x="29" y="80" width="62" height="18" fill="#b91c1c"/>
         <text x="60" y="93" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold" font-family="'Noto Serif TC', serif">太陰神籤</text>
       </svg>
     </div>
 
+    <!-- 自選/更換圖片小工具 (若想放自己的獅獅或特定圖) -->
+    <div class="w-full mt-4 pt-3 border-t border-slate-700/60 flex flex-col items-center">
+      <label for="customImgInput" class="text-[11px] text-amber-300/80 hover:text-amber-200 cursor-pointer flex items-center gap-1">
+        <span>🖼️ 點此換上自己的自訂吉祥物圖案 (可選)</span>
+      </label>
+      <input type="file" id="customImgInput" accept="image/*" class="hidden">
+      <span id="imgTip" class="text-[10px] text-slate-500 mt-0.5">預設使用原創吃肉獅獅圖案</span>
+    </div>
+
     <button 
       id="drawBtn"
-      class="mt-5 w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-red-900/30 transition duration-150 flex items-center justify-center gap-2 text-sm tracking-wider"
+      class="mt-4 w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold py-2.5 px-4 rounded-xl shadow-lg shadow-red-900/30 transition duration-150 flex items-center justify-center gap-2 text-sm tracking-wider"
     >
       <span>🎋 搖一搖・求取神籤</span>
     </button>
   </section>
 
-  <!-- ⛩️ 神社御神籤紙條 (Omikuji 800*1200 等比長條版面) -->
+  <!-- ⛩️ 神社御神籤紙條 (乾淨純粹版：拿掉下方大段文字) -->
   <main id="omikujiWrapper" class="w-full flex flex-col items-center hidden">
     
-    <!-- 籤紙容器 (直式修長比例 1:3 視覺標準) -->
+    <!-- 籤紙容器 (修長長方形 800*1200 等比視覺) -->
     <div 
       id="omikujiPaper" 
-      class="w-[340px] washi-paper border-2 border-[#b91c1c]/30 text-[#b91c1c] p-4 relative overflow-hidden flex flex-col items-center select-none"
+      class="w-[330px] washi-paper border-2 border-[#b91c1c]/30 text-[#b91c1c] p-4 relative overflow-hidden flex flex-col items-center select-none"
     >
-      <!-- 頂部雙層紅色外框與人字破風屋簷 -->
+      <!-- 頂部人字破風屋簷與菊花紋飾 -->
       <div class="w-full flex flex-col items-center">
-        <!-- 屋簷輪廓與十六瓣菊紋 -->
-        <svg class="w-full h-12" viewBox="0 0 320 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- 破風屋簷斜角雙層實線 -->
+        <svg class="w-full h-11" viewBox="0 0 320 50" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M 5 25 L 160 5 L 315 25" stroke="#b91c1c" stroke-width="2.5" fill="none"/>
           <path d="M 12 30 L 160 12 L 308 30" stroke="#b91c1c" stroke-width="1.2" fill="none"/>
-          <!-- 中央十六瓣皇室菊花徽記 (Kikumon) -->
           <g transform="translate(160, 20)">
             <circle cx="0" cy="0" r="4.5" fill="#b91c1c"/>
-            <!-- 菊花花瓣 -->
             <path d="M-2 -12 C-3 -7 -1 -5 0 0 C1 -5 3 -7 2 -12 Z" fill="#b91c1c"/>
             <path d="M-2 12 C-3 7 -1 5 0 0 C1 5 3 7 2 12 Z" fill="#b91c1c"/>
             <path d="M-12 -2 C-7 -3 -5 -1 0 0 C-5 1 -7 3 -12 2 Z" fill="#b91c1c"/>
@@ -122,7 +124,7 @@
           </g>
         </svg>
 
-        <!-- 頂部平行雙層分隔橫線 -->
+        <!-- 頂部雙平行橫實線 -->
         <div class="w-full border-t-2 border-[#b91c1c] mt-0.5"></div>
         <div class="w-full border-t border-[#b91c1c] mt-1"></div>
       </div>
@@ -141,87 +143,55 @@
       <div class="w-full border-t border-[#b91c1c] mt-1"></div>
       <div class="w-full border-t border-[#b91c1c] mt-0.5 mb-4"></div>
 
-      <!-- 核心吉凶大字 (日式正統宋體/明朝體 加大粗朱紅) -->
+      <!-- 核心吉凶大字 (日式明朝體 加大粗朱紅) -->
       <div class="my-2 text-center">
-        <h2 id="omikujiRank" class="text-3xl font-black tracking-[0.2em] text-[#b91c1c] font-serif border-y-2 border-[#b91c1c] py-1.5 px-6 inline-block">
+        <h2 id="omikujiRank" class="text-3xl font-black tracking-[0.2em] text-[#b91c1c] font-serif border-y-2 border-[#b91c1c] py-2 px-6 inline-block">
           上上籤・首獎
         </h2>
       </div>
 
       <!-- 中間雙實線分割 -->
       <div class="w-full border-t border-[#b91c1c] mt-4"></div>
-      <div class="w-full border-t border-[#b91c1c] mt-0.5 mb-4"></div>
+      <div class="w-full border-t border-[#b91c1c] mt-0.5 mb-5"></div>
 
-      <!-- 核心直排籤詩祝詞與手繪獅獅區 -->
-      <div class="w-full flex items-center justify-between min-h-[220px] px-2 relative my-1">
+      <!-- 核心直排籤詩祝詞 ＋ 吉祥物圖案區 (純淨版，無多餘長文字) -->
+      <div class="w-full flex items-center justify-center min-h-[220px] px-3 relative my-2">
         
-        <!-- 左側：神社宜忌微型註解 (直排細字) -->
-        <div class="vertical-text text-[11px] text-[#b91c1c]/80 font-serif leading-relaxed h-[200px] border-l border-[#b91c1c]/20 pl-2">
-          <span class="font-bold text-[#b91c1c]">【神諭叮嚀】</span>
-          <span id="omikujiShortAdvice">持此籤者手速極致，烤肉如神助。下筆作答如有月神加持，福祿無窮。</span>
-        </div>
-
-        <!-- 中央偏右：全直排日式明朝體籤詩 -->
-        <div class="flex items-start justify-center gap-4 h-[210px] pr-2">
-          <!-- 第二句 (左邊) -->
+        <!-- 中央偏左：全直排日式明朝體籤詩 (寬鬆大器) -->
+        <div class="flex items-start justify-center gap-6 h-[210px] mr-12">
+          <!-- 第二行 (左) -->
           <p id="poemLine2" class="vertical-text text-base font-bold text-[#b91c1c] tracking-widest leading-loose">
             眾人皆搶吐司片，唯你獨享五花肉。
           </p>
-          <!-- 第一句 (右邊起首) -->
-          <p id="poemLine1" class="vertical-text text-base font-bold text-[#b91c1c] tracking-widest leading-loose border-l border-[#b91c1c]/20 pl-3">
+          <!-- 第一行 (右起) -->
+          <p id="poemLine1" class="vertical-text text-base font-bold text-[#b91c1c] tracking-widest leading-loose border-l border-[#b91c1c]/25 pl-4">
             生肉熟食分得清，香腸金黃不帶黑；
           </p>
         </div>
 
-        <!-- 右下角：專屬手繪吉祥物獅獅 (拿著烤肉串・雙頰鼓鼓) -->
-        <div class="absolute -bottom-1 -right-1 z-10 w-24 h-24 pointer-events-none">
-          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full drop-shadow-sm">
-            <!-- 鬃毛 -->
-            <path d="M50 15 C30 15 18 30 18 50 C18 70 30 85 50 85 C70 85 82 70 82 50 C82 30 70 15 50 15 Z" fill="#C27D38"/>
-            <!-- 鬃毛外圍齒狀 -->
-            <circle cx="50" cy="18" r="7" fill="#A86224"/>
-            <circle cx="28" cy="26" r="7" fill="#A86224"/>
-            <circle cx="72" cy="26" r="7" fill="#A86224"/>
-            <circle cx="18" cy="48" r="7" fill="#A86224"/>
-            <circle cx="82" cy="48" r="7" fill="#A86224"/>
-            <circle cx="28" cy="72" r="7" fill="#A86224"/>
-            <circle cx="72" cy="72" r="7" fill="#A86224"/>
-            <!-- 臉蛋 -->
-            <ellipse cx="50" cy="53" rx="27" ry="24" fill="#E8A859"/>
-            <ellipse cx="50" cy="58" rx="20" ry="16" fill="#FDE3B2"/>
-            <!-- 鼓鼓的腮紅螺旋 -->
-            <circle cx="34" cy="56" r="5" fill="#EF6A5B" opacity="0.6"/>
-            <circle cx="66" cy="56" r="5" fill="#EF6A5B" opacity="0.6"/>
-            <!-- 眼睛 (彎彎瞇眼) -->
-            <path d="M36 47 Q40 43 44 47" stroke="#3E2415" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <path d="M56 47 Q60 43 64 47" stroke="#3E2415" stroke-width="2.2" stroke-linecap="round" fill="none"/>
-            <!-- 嘴巴 (嚼烤肉的塞滿鼓臉波浪線) -->
-            <path d="M46 58 Q50 63 54 58" stroke="#3E2415" stroke-width="2" stroke-linecap="round" fill="none"/>
-            <!-- 烤肉串 (右手小籤) -->
-            <g transform="translate(68, 62) rotate(25)">
-              <line x1="0" y1="0" x2="0" y2="28" stroke="#8D5B28" stroke-width="2" stroke-linecap="round"/>
-              <circle cx="0" cy="6" r="3.5" fill="#B91C1C"/>
-              <circle cx="0" cy="13" r="3.5" fill="#15803D"/>
-              <circle cx="0" cy="20" r="3.5" fill="#B45309"/>
-            </g>
-          </svg>
+        <!-- 右下角吉祥物圖片容器 (可自訂上傳，預設為吃肉獅獅) -->
+        <div class="absolute bottom-0 right-2 z-10 w-24 h-24 flex items-end justify-center pointer-events-none">
+          <img 
+            id="mascotImg" 
+            src="data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M50 15 C30 15 18 30 18 50 C18 70 30 85 50 85 C70 85 82 70 82 50 C82 30 70 15 50 15 Z' fill='%23C27D38'/><circle cx='50' cy='18' r='7' fill='%23A86224'/><circle cx='28' cy='26' r='7' fill='%23A86224'/><circle cx='72' cy='26' r='7' fill='%23A86224'/><circle cx='18' cy='48' r='7' fill='%23A86224'/><circle cx='82' cy='48' r='7' fill='%23A86224'/><circle cx='28' cy='72' r='7' fill='%23A86224'/><circle cx='72' cy='72' r='7' fill='%23A86224'/><ellipse cx='50' cy='53' rx='27' ry='24' fill='%23E8A859'/><ellipse cx='50' cy='58' rx='20' ry='16' fill='%23FDE3B2'/><circle cx='34' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><circle cx='66' cy='56' r='5' fill='%23EF6A5B' opacity='0.6'/><path d='M36 47 Q40 43 44 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M56 47 Q60 43 64 47' stroke='%233E2415' stroke-width='2.2' stroke-linecap='round'/><path d='M46 58 Q50 63 54 58' stroke='%233E2415' stroke-width='2' stroke-linecap='round'/><g transform='translate(68, 62) rotate(25)'><line x1='0' y1='0' x2='0' y2='28' stroke='%238D5B28' stroke-width='2' stroke-linecap='round'/><circle cx='0' cy='6' r='3.5' fill='%23B91C1C'/><circle cx='0' cy='13' r='3.5' fill='%2315803D'/><circle cx='0' cy='20' r='3.5' fill='%23B45309'/></g></svg>" 
+            alt="吉祥物"
+            class="max-w-full max-h-full object-contain drop-shadow-sm"
+          >
         </div>
 
       </div>
 
       <!-- 底部雙實線分割 -->
-      <div class="w-full border-t border-[#b91c1c] mt-2"></div>
+      <div class="w-full border-t border-[#b91c1c] mt-4"></div>
       <div class="w-full border-t-2 border-[#b91c1c] mt-0.5"></div>
 
-      <!-- 底部紅白慶典水引繩結 (Mizuhiki Umemusubi 梅花結紋章) -->
-      <div class="w-full flex flex-col items-center my-3 relative">
+      <!-- 底部紅白慶典水引繩結 (Mizuhiki 梅花結) -->
+      <div class="w-full flex flex-col items-center my-3.5 relative">
         <svg class="w-48 h-10" viewBox="0 0 200 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- 水引平行細線條 -->
           <line x1="0" y1="20" x2="80" y2="20" stroke="#b91c1c" stroke-width="1.2"/>
           <line x1="0" y1="24" x2="80" y2="24" stroke="#b91c1c" stroke-width="1.2"/>
           <line x1="120" y1="20" x2="200" y2="20" stroke="#b91c1c" stroke-width="1.2"/>
           <line x1="120" y1="24" x2="200" y2="24" stroke="#b91c1c" stroke-width="1.2"/>
-          <!-- 中央梅花水引結 (Umemusubi) -->
           <g transform="translate(100, 21)" stroke="#b91c1c" stroke-width="1.5" fill="none">
             <circle cx="0" cy="-6" r="5"/>
             <circle cx="-6" cy="-1" r="5"/>
@@ -246,7 +216,7 @@
     </div>
 
     <!-- 底部社群行動操作列 -->
-    <div class="w-[340px] flex flex-col gap-2.5 mt-5">
+    <div class="w-[330px] flex flex-col gap-2.5 mt-5">
       <!-- 儲存籤紙圖片按鈕 -->
       <button 
         id="saveImgBtn"
@@ -275,37 +245,32 @@
 
   </main>
 
-  <!-- 籤詩資料庫與核心運作邏輯 -->
+  <!-- 核心運作邏輯 -->
   <script>
-    // 四大籤種資料設定
     const OMIKUJI_LIST = [
       {
         category: "天字第一號・炭火總指揮官",
         rank: "上上籤・首獎",
         line1: "生肉熟食分得清，香腸金黃不帶黑；",
-        line2: "眾人皆搶吐司片，唯你獨享五花肉。",
-        advice: "持此籤者手速極致，烤肉如神助。下筆作答如有月神加持，福祿無窮。"
+        line2: "眾人皆搶吐司片，唯你獨享五花肉。"
       },
       {
         category: "特級柚惑・熱量免役大師",
         rank: "大吉・吃貨籤",
         line1: "蛋黃酥皮層層起，柚子甜美不用剝；",
-        line2: "連假熱量歸月亮，長肉全算在吳剛。",
-        advice: "胃納如宇宙廣闊，所食之脂肪皆化為靈感，連假期間宜盡情品味。"
+        line2: "連假熱量歸月亮，長肉全算在吳剛。"
       },
       {
         category: "佛系看客・人間避雷針",
         rank: "中吉・安泰籤",
         line1: "木炭點火半小時，火星未起心先平；",
-        line2: "雖然答錯三五題，至少沒被濃煙燻。",
-        advice: "身處上風處怡然自得，遠離凡俗濃煙爭擾，智者之風展露無遺。"
+        line2: "雖然答錯三五題，至少沒被濃煙燻。"
       },
       {
         category: "吳剛化身・下班解脫者",
         rank: "末吉・放飛籤",
         line1: "砍樹萬年砍不倒，作答全憑直覺衝；",
-        line2: "分數高低皆浮雲，連假放飛萬事通。",
-        advice: "月相十五不圓十六圓，後福無量。緊閉通知、補眠至日上三竿乃上策。"
+        line2: "分數高低皆浮雲，連假放飛萬事通。"
       }
     ];
 
@@ -316,13 +281,29 @@
     const omikujiPaper = document.getElementById('omikujiPaper');
     const redrawBtn = document.getElementById('redrawBtn');
     const saveImgBtn = document.getElementById('saveImgBtn');
+    const mascotImg = document.getElementById('mascotImg');
+    const customImgInput = document.getElementById('customImgInput');
+    const imgTip = document.getElementById('imgTip');
 
     // 籤紙欄位
     const omikujiCategory = document.getElementById('omikujiCategory');
     const omikujiRank = document.getElementById('omikujiRank');
     const poemLine1 = document.getElementById('poemLine1');
     const poemLine2 = document.getElementById('poemLine2');
-    const omikujiShortAdvice = document.getElementById('omikujiShortAdvice');
+
+    // 自訂上傳圖片即時預覽功能
+    customImgInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          mascotImg.src = event.target.result;
+          imgTip.textContent = `✅ 已成功換上自訂圖片：${file.name}`;
+          imgTip.classList.add('text-emerald-400');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
     // 搖籤動作
     function performDraw() {
@@ -332,43 +313,38 @@
 
       setTimeout(() => {
         cylinder.classList.remove('animate-shake');
-        // 隨機抽出一張籤
         const luckyOne = OMIKUJI_LIST[Math.floor(Math.random() * OMIKUJI_LIST.length)];
         
-        // 帶入內容
         omikujiCategory.textContent = luckyOne.category;
         omikujiRank.textContent = luckyOne.rank;
         poemLine1.textContent = luckyOne.line1;
         poemLine2.textContent = luckyOne.line2;
-        omikujiShortAdvice.textContent = luckyOne.advice;
 
-        // 畫面切換
         drawBox.classList.add('hidden');
         omikujiWrapper.classList.remove('hidden');
         omikujiWrapper.scrollIntoView({ behavior: 'smooth' });
 
         drawBtn.disabled = false;
         drawBtn.innerText = "🎋 搖一搖・求取神籤";
-      }, 700);
+      }, 650);
     }
 
     drawBtn.addEventListener('click', performDraw);
     cylinder.addEventListener('click', performDraw);
 
-    // 再求一次籤
     redrawBtn.addEventListener('click', () => {
       omikujiWrapper.classList.add('hidden');
       drawBox.classList.remove('hidden');
       drawBox.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // 匯出生成高解析長條圖卡 (html2canvas)
+    // 匯出生成高畫質長條圖卡 (html2canvas)
     saveImgBtn.addEventListener('click', () => {
       saveImgBtn.innerText = "⏳ 正在生成籤紙圖檔...";
       saveImgBtn.disabled = true;
 
       html2canvas(omikujiPaper, {
-        scale: 3, // 3倍高畫質匯出，確保文字和紋理銳利
+        scale: 3,
         useCORS: true,
         backgroundColor: null
       }).then(canvas => {
@@ -383,7 +359,7 @@
         }, 2500);
       }).catch(err => {
         console.error(err);
-        alert("存圖遇到問題，也可以直接使用手機截圖長條籤紙喔！");
+        alert("也可以直接使用手機螢幕截圖儲存這張籤紙喔！");
         saveImgBtn.innerText = "📸 下載/長按儲存這張籤紙";
         saveImgBtn.disabled = false;
       });
@@ -393,8 +369,13 @@
 </html>
 ```eof
 
-### 🎯 這個小程式的亮點與社群操作配套：
-1. **零安裝、點開即玩**：整個程式打包在單一 `.html` 檔案中，包含動畫、和紙質感、日式明朝直排字體、水引梅花結與手繪吃肉「獅獅」SVG，上傳至靜態網頁（如 GitHub Pages / Vercel）即可使用。
-2. **完整還原日式御神籤長條版面**：頂部破風人字屋簷嵌菊花紋、雙層紅實線、純朱紅字色與直排詩句，完美具備「長條形籤紙」的精緻儀式感。
-3. **高解析一鍵存圖**：內建 `html2canvas` 3 倍取樣，在手機上下載的圖檔邊緣清晰俐落，非常適合追蹤者發到 FB 限時動態或在留言區蓋樓。
-4. **緊密扣連你的 FB 導流閉環**：底部的藍色按鈕直接設定導回 FB 貼文，明確告訴大家：「把這張籤紙貼在留言區，小編會透過私訊回傳【詳細解籤內容 ＋ Kahoot! 冷知識題組一鍵複製包】」，順暢達成衝高貼文留言權重與派發教學資源的目的！
+### 🛠️ 本次更新的重點與更新步驟：
+
+1. **版面純粹化**：完全移除了原本下方落落長的註解與宜忌說明，籤紙正中央只留下 **全直排朱紅明朝體詩句** 與右下角的吉祥物，比例更修長乾淨，古典神籤感大幅提升。
+2. **圖片更換機制**：
+   * **即時點選上傳**：頁面上方新增了「🖼️ 點此換上自己的自訂吉祥物圖案」，只要點擊選取你手機或電腦裡的去背獅獅圖，籤紙就會直接換成你的圖！
+   * **永久替換法**：如果你把這段程式碼覆蓋回 GitHub 的 `index.html`，也可以直接把你那張獅獅圖片命名為 `shishi.png` 一起上傳到 GitHub，然後在程式碼把 `src="..."` 換成 `shishi.png` 即可。
+3. **如何更新到你的 GitHub Pages？**
+   * 打開你電腦裡的 `index.html`，把舊代碼全選刪除，貼上上面這段新代碼並儲存。
+   * 回到 GitHub 專案首頁，點右上角 **「Add file」** ➜ **「Upload files」**，把存好的 `index.html` 拖進去並按 **Commit changes**。
+   * 等 30 秒後重新整理網頁，新版乾淨且支援換圖的抽籤小工具就正式上線了！
