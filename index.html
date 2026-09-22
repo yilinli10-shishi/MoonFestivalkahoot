@@ -6,7 +6,6 @@
   <title>Kahoot! 中秋挑戰賽・太陰神籤解鎖所</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -73,7 +72,7 @@
         點擊下方按鈕將在「新分頁」開啟題組。<br>完成所有題目後，在最後一題領取「通關暗號」！
       </p>
       
-      <!-- ⚠️ 請將 href 換成你正式發布的 Kahoot Challenge 網址 -->
+      <!-- 點此開啟 Kahoot 挑戰賽按鈕 -->
       <a 
         id="kahootStartBtn"
         href="https://kahoot.it" 
@@ -101,7 +100,7 @@
           <input 
             type="text" 
             id="passcodeInput" 
-            placeholder="請輸入通關暗號（例如：2026）"
+            placeholder="請輸入通關暗號（完成挑戰賽即可獲得）"
             class="w-full bg-slate-950 border border-slate-600 rounded-xl px-4 py-2.5 text-center text-amber-300 font-bold placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition text-sm"
           >
           <p id="errorMsg" class="text-[11px] text-red-400 text-center mt-1.5 hidden">
@@ -207,21 +206,23 @@
   <script>
     /*
       ===============================================================
-      1. 通關暗號設定（支援多種常見回答，大小寫/空白自動忽略）
-      可在 Kahoot 挑戰的最後一題公佈以下其中一個暗號：
+      【設定 1：替換你的 Kahoot! 挑戰賽連結】
+      請直接把引號內的網址換成你的 Kahoot 題目連結：
       ===============================================================
     */
-    const VALID_PASSCODES = [
-      "2026",
-      "中秋快樂",
-      "KAHOOT",
-      "烤肉",
-      "嫦娥"
-    ];
+    const KAHOOT_CHALLENGE_URL = "https://kahoot.it/challenge/06375417"; 
 
     /*
       ===============================================================
-      2. 你的 4 張完整籤紙圖片檔名清單（需與 GitHub 同名放在最外層）
+      【設定 2：通關暗號】
+      已設定為「2026中秋節快樂」
+      ===============================================================
+    */
+    const VALID_PASSCODE = "2026中秋節快樂";
+
+    /*
+      ===============================================================
+      【設定 3：你的 4 張完整籤紙圖片檔名】
       ===============================================================
     */
     const FORTUNE_IMAGES = [
@@ -230,6 +231,10 @@
       "mascot3.png",
       "mascot4.png"
     ];
+
+    // 初始化按鈕網址
+    const kahootStartBtn = document.getElementById('kahootStartBtn');
+    kahootStartBtn.href = KAHOOT_CHALLENGE_URL;
 
     // 元素引用
     const lockSection = document.getElementById('lockSection');
@@ -257,10 +262,10 @@
     });
 
     function verifyPasscode() {
-      const userCode = passcodeInput.value.trim().toUpperCase();
-      const isMatch = VALID_PASSCODES.some(code => code.toUpperCase() === userCode);
+      // 自動去除頭尾空白以防手機複製多帶空格
+      const userCode = passcodeInput.value.trim();
 
-      if (isMatch) {
+      if (userCode === VALID_PASSCODE) {
         // 解鎖成功
         isUnlocked = true;
         errorMsg.classList.add('hidden');
