@@ -3,16 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kahoot! 中秋太陰御神籤・線上抽籤所</title>
+  <title>Kahoot! 中秋挑戰賽・太陰神籤解鎖所</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
     body {
       background: radial-gradient(circle at 50% 15%, #181d31 0%, #0c0e17 100%);
+      font-family: 'Noto Sans TC', sans-serif;
+    }
+    .font-serif-tc {
       font-family: 'Noto Serif TC', serif;
     }
 
@@ -42,92 +45,161 @@
 <body class="min-h-screen text-slate-200 flex flex-col items-center justify-start py-8 px-4">
 
   <!-- 頂部活動前導說明 -->
-  <header class="text-center max-w-sm w-full mb-6">
+  <header class="text-center max-w-md w-full mb-6">
     <div class="inline-flex items-center gap-1.5 px-3 py-1 bg-red-950/40 border border-red-500/30 rounded-full text-red-300 text-xs font-medium mb-3">
-      <span>🌕 丙午年中秋太陰神諭所</span>
+      <span>🌕 丙午年中秋太陰神諭所 ✕ Kahoot!</span>
     </div>
-    <h1 class="text-2xl font-bold tracking-wide text-amber-100">
-      Kahoot! 挑戰完賽抽籤所
+    <h1 class="text-2xl sm:text-3xl font-bold tracking-wide text-amber-100 font-serif-tc">
+      中秋挑戰・神籤解鎖處
     </h1>
-    <p class="text-xs text-slate-400 mt-1.5 leading-relaxed">
-      答題完畢！搖動神籤筒求取你的專屬中秋籤紙<br>
-      長按存圖貼回 FB 留言，領取「詳細解籤 ＋ 冷知識題組包」！
+    <p class="text-xs sm:text-sm text-slate-400 mt-2 leading-relaxed">
+      完成 Kahoot! 挑戰獲得通關暗號，解鎖專屬神籤<br>
+      曬籤貼回 FB 留言，直接領取「詳細解籤 ＋ 冷知識題組包」！
     </p>
   </header>
 
-  <!-- 籤筒搖籤互動區 -->
-  <section id="drawBox" class="w-full max-w-xs flex flex-col items-center bg-slate-900/80 backdrop-blur border border-slate-700/80 rounded-2xl p-6 shadow-xl mb-6">
-    <!-- 籤筒本體 SVG -->
-    <div id="cylinder" class="cursor-pointer transition-transform hover:scale-105 active:scale-95 duration-200">
-      <svg width="120" height="150" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M25 40 L30 140 C30 145 90 145 90 140 L95 40 Z" fill="#b45309" stroke="#78350f" stroke-width="3"/>
-        <path d="M25 40 C25 35 95 35 95 40 C95 45 25 45 25 40 Z" fill="#d97706" stroke="#78350f" stroke-width="2"/>
-        <line x1="60" y1="12" x2="60" y2="40" stroke="#fde68a" stroke-width="5" stroke-linecap="round"/>
-        <line x1="48" y1="20" x2="52" y2="40" stroke="#fef3c7" stroke-width="4" stroke-linecap="round"/>
-        <line x1="72" y1="18" x2="68" y2="40" stroke="#fef3c7" stroke-width="4" stroke-linecap="round"/>
-        <rect x="29" y="80" width="62" height="18" fill="#b91c1c"/>
-        <text x="60" y="93" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold" font-family="'Noto Serif TC', serif">太陰神籤</text>
-      </svg>
-    </div>
+  <!-- 闖關與抽籤主面板 -->
+  <main class="w-full max-w-sm flex flex-col items-center">
 
-    <button 
-      id="drawBtn"
-      class="mt-6 w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-red-900/30 transition duration-150 flex items-center justify-center gap-2 text-sm tracking-wider"
-    >
-      <span>🎋 搖一搖・求取神籤</span>
-    </button>
-  </section>
-
-  <!-- ⛩️ 籤紙展示區（已徹底移除所有 HTML 網頁籤紙，純 100% 顯示你的專屬圖檔） -->
-  <main id="omikujiWrapper" class="w-full flex flex-col items-center hidden">
-    
-    <!-- 純圖片展示容器 -->
-    <div class="w-full max-w-[340px] flex flex-col items-center animate-pop-in">
-      
-      <!-- 你的專屬籤紙圖片本體 -->
-      <div class="w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 bg-slate-900/40">
-        <img 
-          id="fortuneResultImg" 
-          src="" 
-          alt="中秋御神籤" 
-          class="w-full h-auto object-contain block select-none"
-        >
+    <!-- 步驟一：前往 Kahoot 挑戰按鈕（新分頁開啟） -->
+    <div class="w-full bg-slate-900/90 border border-amber-500/40 rounded-2xl p-5 shadow-xl mb-4 text-center">
+      <div class="text-xs font-bold text-amber-400 tracking-wider mb-1">
+        STEP 1・前哨挑戰
       </div>
-
-      <p class="text-[11px] text-slate-400 mt-2 tracking-wide">
-        💡 手機用戶可長按圖片直接「儲存到照片」
+      <h2 class="text-base font-bold text-white mb-2">
+        前往 Kahoot! 進行中秋答題
+      </h2>
+      <p class="text-xs text-slate-400 mb-4 leading-relaxed">
+        點擊下方按鈕將在「新分頁」開啟題組。<br>完成所有題目後，在最後一題領取「通關暗號」！
       </p>
-
-    </div>
-
-    <!-- 底部社群行動操作列 -->
-    <div class="w-[340px] flex flex-col gap-2.5 mt-5">
-      <!-- 下載圖片按鈕（直接下載剛抽出的完整圖片） -->
-      <button 
-        id="downloadPureImgBtn"
-        class="w-full bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm"
-      >
-        <span>📸 下載這張籤紙圖片</span>
-      </button>
-
-      <!-- 引導貼回 FB 領冷知識題組 -->
+      
+      <!-- ⚠️ 請將 href 換成你正式發布的 Kahoot Challenge 網址 -->
       <a 
-        id="fbPostLink"
-        href="https://www.facebook.com" 
+        id="kahootStartBtn"
+        href="https://kahoot.it" 
         target="_blank" 
         rel="noopener noreferrer"
-        class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition flex items-center justify-center gap-2 text-sm"
+        class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm"
       >
-        <span>💬 貼回 FB 貼文留言，兌換【完整解籤＋題組包】</span>
+        <span>🚀 點此開啟【Kahoot! 挑戰賽】</span>
       </a>
+    </div>
+
+    <!-- 步驟二：輸入暗號解鎖神籤筒 -->
+    <section id="lockSection" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl p-5 shadow-xl mb-6">
+      <div class="text-center mb-3">
+        <div class="text-xs font-bold text-slate-400 tracking-wider mb-1">
+          STEP 2・暗號認證
+        </div>
+        <h3 class="text-sm font-bold text-slate-200">
+          輸入 Kahoot 結尾通關暗號
+        </h3>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <input 
+            type="text" 
+            id="passcodeInput" 
+            placeholder="請輸入通關暗號（例如：2026）"
+            class="w-full bg-slate-950 border border-slate-600 rounded-xl px-4 py-2.5 text-center text-amber-300 font-bold placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition text-sm"
+          >
+          <p id="errorMsg" class="text-[11px] text-red-400 text-center mt-1.5 hidden">
+            ⚠️ 暗號不正確喔！請確認 Kahoot 結尾所提供的通關暗號
+          </p>
+        </div>
+
+        <button 
+          id="unlockBtn"
+          class="w-full bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold py-2.5 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-1.5 text-sm"
+        >
+          <span>🔓 驗證並解鎖神籤筒</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- 步驟三：解鎖後的籤筒搖籤互動區 (解鎖前鎖定) -->
+    <section id="drawBox" class="w-full flex flex-col items-center bg-slate-900/80 border border-slate-700/80 rounded-2xl p-6 shadow-xl mb-6 opacity-40 pointer-events-none transition-all duration-300">
+      
+      <!-- 狀態提示標籤 -->
+      <div id="boxStatusTag" class="text-[11px] font-semibold text-slate-400 bg-slate-800 px-3 py-1 rounded-full mb-3 flex items-center gap-1">
+        <span>🔒 籤筒尚未解鎖</span>
+      </div>
+
+      <!-- 籤筒本體 SVG -->
+      <div id="cylinder" class="transition-transform duration-200">
+        <svg width="110" height="140" viewBox="0 0 120 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 40 L30 140 C30 145 90 145 90 140 L95 40 Z" fill="#b45309" stroke="#78350f" stroke-width="3"/>
+          <path d="M25 40 C25 35 95 35 95 40 C95 45 25 45 25 40 Z" fill="#d97706" stroke="#78350f" stroke-width="2"/>
+          <line x1="60" y1="12" x2="60" y2="40" stroke="#fde68a" stroke-width="5" stroke-linecap="round"/>
+          <line x1="48" y1="20" x2="52" y2="40" stroke="#fef3c7" stroke-width="4" stroke-linecap="round"/>
+          <line x1="72" y1="18" x2="68" y2="40" stroke="#fef3c7" stroke-width="4" stroke-linecap="round"/>
+          <rect x="29" y="80" width="62" height="18" fill="#b91c1c"/>
+          <text x="60" y="93" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold" font-family="'Noto Serif TC', serif">太陰神籤</text>
+        </svg>
+      </div>
 
       <button 
-        id="redrawBtn"
-        class="text-xs text-slate-400 hover:text-slate-200 text-center py-1 mt-1 underline"
+        id="drawBtn"
+        disabled
+        class="mt-5 w-full bg-slate-700 text-slate-400 font-bold py-3 px-4 rounded-xl shadow-md transition duration-150 flex items-center justify-center gap-2 text-sm tracking-wider cursor-not-allowed"
       >
-        🔄 再求一次籤
+        <span>🎋 請先完成上方暗號驗證</span>
       </button>
-    </div>
+    </section>
+
+    <!-- ⛩️ 籤紙展示區 (抽完籤才呈現你的 100% 完整圖片) -->
+    <section id="omikujiWrapper" class="w-full flex flex-col items-center hidden">
+      
+      <!-- 純圖片展示容器 -->
+      <div class="w-full flex flex-col items-center animate-pop-in">
+        
+        <!-- 你的專屬籤紙圖片本體 -->
+        <div class="w-full rounded-2xl overflow-hidden shadow-2xl border border-slate-700/60 bg-slate-900/40">
+          <img 
+            id="fortuneResultImg" 
+            src="" 
+            alt="中秋御神籤" 
+            class="w-full h-auto object-contain block select-none"
+          >
+        </div>
+
+        <p class="text-[11px] text-slate-400 mt-2 tracking-wide">
+          💡 手機用戶可長按上方圖片直接「儲存到照片」
+        </p>
+
+      </div>
+
+      <!-- 底部社群行動操作列 -->
+      <div class="w-full flex flex-col gap-2.5 mt-5">
+        <!-- 下載圖片按鈕 -->
+        <button 
+          id="downloadPureImgBtn"
+          class="w-full bg-amber-500 hover:bg-amber-400 active:scale-[0.99] text-slate-950 font-bold py-3 px-4 rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm"
+        >
+          <span>📸 下載這張籤紙圖片</span>
+        </button>
+
+        <!-- 引導貼回 FB 領冷知識題組 -->
+        <a 
+          id="fbPostLink"
+          href="https://www.facebook.com" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md transition flex items-center justify-center gap-2 text-sm"
+        >
+          <span>💬 貼回 FB 貼文留言，兌換【完整解籤＋題組包】</span>
+        </a>
+
+        <button 
+          id="redrawBtn"
+          class="text-xs text-slate-400 hover:text-slate-200 text-center py-1 mt-1 underline"
+        >
+          🔄 再求一次籤
+        </button>
+      </div>
+
+    </section>
 
   </main>
 
@@ -135,30 +207,91 @@
   <script>
     /*
       ===============================================================
-      【設定你的籤紙圖片清單】
-      把你在電腦做好的完整籤紙圖片，上傳到 GitHub 專案中。
-      預設支援 4 張圖（可自行增減），請確保檔名與 GitHub 上的一致：
+      1. 通關暗號設定（支援多種常見回答，大小寫/空白自動忽略）
+      可在 Kahoot 挑戰的最後一題公佈以下其中一個暗號：
+      ===============================================================
+    */
+    const VALID_PASSCODES = [
+      "2026",
+      "中秋快樂",
+      "KAHOOT",
+      "烤肉",
+      "嫦娥"
+    ];
+
+    /*
+      ===============================================================
+      2. 你的 4 張完整籤紙圖片檔名清單（需與 GitHub 同名放在最外層）
       ===============================================================
     */
     const FORTUNE_IMAGES = [
-      "mascot1.png", // 籤紙圖片 1（例如：上上籤）
-      "mascot2.png", // 籤紙圖片 2（例如：大吉籤）
-      "mascot3.png", // 籤紙圖片 3（例如：中吉籤）
-      "mascot4.png"  // 籤紙圖片 4（例如：末吉籤）
+      "mascot1.png",
+      "mascot2.png",
+      "mascot3.png",
+      "mascot4.png"
     ];
 
+    // 元素引用
+    const lockSection = document.getElementById('lockSection');
+    const passcodeInput = document.getElementById('passcodeInput');
+    const unlockBtn = document.getElementById('unlockBtn');
+    const errorMsg = document.getElementById('errorMsg');
+
     const drawBox = document.getElementById('drawBox');
-    const drawBtn = document.getElementById('drawBtn');
+    const boxStatusTag = document.getElementById('boxStatusTag');
     const cylinder = document.getElementById('cylinder');
+    const drawBtn = document.getElementById('drawBtn');
+
     const omikujiWrapper = document.getElementById('omikujiWrapper');
     const fortuneResultImg = document.getElementById('fortuneResultImg');
-    const redrawBtn = document.getElementById('redrawBtn');
     const downloadPureImgBtn = document.getElementById('downloadPureImgBtn');
+    const redrawBtn = document.getElementById('redrawBtn');
 
     let currentDrawnImage = "";
+    let isUnlocked = false;
 
-    // 搖籤動作
+    // 暗號驗證解鎖邏輯
+    unlockBtn.addEventListener('click', verifyPasscode);
+    passcodeInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') verifyPasscode();
+    });
+
+    function verifyPasscode() {
+      const userCode = passcodeInput.value.trim().toUpperCase();
+      const isMatch = VALID_PASSCODES.some(code => code.toUpperCase() === userCode);
+
+      if (isMatch) {
+        // 解鎖成功
+        isUnlocked = true;
+        errorMsg.classList.add('hidden');
+        lockSection.classList.add('opacity-60');
+        passcodeInput.disabled = true;
+        unlockBtn.disabled = true;
+        unlockBtn.innerText = "✅ 暗號正確！籤筒已為您解鎖";
+        unlockBtn.className = "w-full bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl text-sm transition cursor-default";
+
+        // 解鎖籤筒互動區
+        drawBox.classList.remove('opacity-40', 'pointer-events-none');
+        boxStatusTag.className = "text-[11px] font-semibold text-emerald-400 bg-emerald-950/80 border border-emerald-500/40 px-3 py-1 rounded-full mb-3 flex items-center gap-1";
+        boxStatusTag.innerHTML = "<span>✨ 神籤筒已解鎖！請點擊搖籤</span>";
+
+        drawBtn.disabled = false;
+        drawBtn.className = "mt-5 w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-red-900/30 transition duration-150 flex items-center justify-center gap-2 text-sm tracking-wider cursor-pointer";
+        drawBtn.innerHTML = "<span>🎋 搖一搖・求取神籤</span>";
+        cylinder.classList.add('cursor-pointer', 'hover:scale-105', 'active:scale-95');
+
+        drawBox.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // 暗號錯誤
+        errorMsg.classList.remove('hidden');
+        passcodeInput.focus();
+      }
+    }
+
+    // 搖籤行為
     function performDraw() {
+      if (!isUnlocked) return;
+
       drawBtn.disabled = true;
       drawBtn.innerText = "🎋 誠心祈念中...";
       cylinder.classList.add('animate-shake');
@@ -166,15 +299,15 @@
       setTimeout(() => {
         cylinder.classList.remove('animate-shake');
         
-        // 隨機抽選一張你上傳的完整籤紙圖片
+        // 隨機抽取一張原圖
         const randomIndex = Math.floor(Math.random() * FORTUNE_IMAGES.length);
         currentDrawnImage = FORTUNE_IMAGES[randomIndex];
 
-        // 將圖片填入 img 標籤
         fortuneResultImg.src = currentDrawnImage;
 
-        // 切換介面
+        // 切換顯示
         drawBox.classList.add('hidden');
+        lockSection.classList.add('hidden');
         omikujiWrapper.classList.remove('hidden');
         omikujiWrapper.scrollIntoView({ behavior: 'smooth' });
 
@@ -193,7 +326,7 @@
       drawBox.scrollIntoView({ behavior: 'smooth' });
     });
 
-    // 下載圖片按鈕（直接下載原圖檔案）
+    // 原圖下載
     downloadPureImgBtn.addEventListener('click', () => {
       if (!currentDrawnImage) return;
 
